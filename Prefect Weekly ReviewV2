@@ -1,9 +1,11 @@
 
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Prefect Weekly Review Checklist</title>
+    <title>Automated Teacher Lesson Planner</title>
     <style>
         * {
             margin: 0;
@@ -13,197 +15,213 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 12px;
+            border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            margin-bottom: 20px;
         }
 
-        .header-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+        .teacher-selector {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .header-info input {
-            padding: 10px 15px;
+        .teacher-selector select {
+            padding: 12px 20px;
             border: none;
-            border-radius: 6px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            min-width: 250px;
             background: rgba(255,255,255,0.95);
+            cursor: pointer;
+            font-weight: 600;
         }
 
-        .content {
-            padding: 30px;
+        .week-navigator {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
         }
 
-        .section {
-            margin-bottom: 30px;
+        .week-navigator button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .week-navigator button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .week-display {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .teacher-info {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 30px;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .planner-body {
+            padding: 0 30px 30px 30px;
+        }
+
+        .day-section {
+            margin-bottom: 25px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             overflow: hidden;
         }
 
-        .section-header {
-            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        .day-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 15px 20px;
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .section-body {
+        .lesson-entry {
             padding: 20px;
-        }
-
-        .checklist-item {
-            display: grid;
-            grid-template-columns: 30px 1fr 80px;
-            gap: 15px;
-            align-items: start;
-            padding: 15px;
             border-bottom: 1px solid #f0f0f0;
-            transition: background 0.3s;
+            background: white;
         }
 
-        .checklist-item:hover {
-            background: #f9f9f9;
-        }
-
-        .checklist-item:last-child {
+        .lesson-entry:last-child {
             border-bottom: none;
         }
 
-        .checklist-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-top: 5px;
-            cursor: pointer;
-            accent-color: #3498db;
-        }
-
-        .checklist-item label {
-            font-weight: 600;
-            color: #333;
-            cursor: pointer;
-            line-height: 1.6;
-        }
-
-        .status-select {
-            padding: 6px 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            background: white;
-        }
-
-        .status-select:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .comment-box {
-            grid-column: 2 / 4;
-            margin-top: 10px;
-        }
-
-        .comment-box textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .comment-box textarea:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .comment-label {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .signature-section {
-            margin-top: 40px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .signature-grid {
+        .lesson-header-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .signature-box {
-            border: 2px solid #3498db;
-            border-radius: 8px;
-            padding: 20px;
-            background: white;
-        }
-
-        .signature-box h3 {
-            color: #3498db;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
             margin-bottom: 15px;
+        }
+
+        .class-subject {
+            background: #667eea;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-weight: bold;
             font-size: 16px;
         }
 
-        .signature-box input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .signature-box input:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .signature-line {
-            border-top: 2px solid #333;
-            margin-top: 30px;
-            padding-top: 5px;
+        .date-display {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-weight: 600;
             text-align: center;
-            font-size: 13px;
-            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+
+        .lesson-content {
+            display: grid;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+            padding-top: 10px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
         .print-btn {
-            background: #27ae60;
+            background: #4CAF50;
             color: white;
             border: none;
             padding: 15px 30px;
@@ -218,7 +236,14 @@
 
         .print-btn:hover {
             transform: scale(1.05);
-            background: #229954;
+            background: #45a049;
+        }
+
+        .no-lessons {
+            padding: 40px;
+            text-align: center;
+            color: #999;
+            font-style: italic;
         }
 
         @media print {
@@ -228,26 +253,18 @@
             }
             .container {
                 box-shadow: none;
-                max-width: 100%;
             }
-            .print-btn {
+            .print-btn,
+            .week-navigator {
                 display: none;
             }
         }
 
         @media (max-width: 768px) {
-            .header-info,
-            .signature-grid {
+            .teacher-selector,
+            .lesson-header-row,
+            .input-group {
                 grid-template-columns: 1fr;
-            }
-
-            .checklist-item {
-                grid-template-columns: 25px 1fr;
-            }
-
-            .status-select {
-                grid-column: 2;
-                margin-top: 10px;
             }
         }
     </style>
@@ -255,206 +272,231 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏫 School Prefect Weekly Review Checklist</h1>
-            <div class="header-info">
-                <input type="text" id="prefectName" placeholder="Prefect Name">
-                <input type="text" id="weekOf" placeholder="Week of (e.g., Jan 13-17, 2026)">
+            <h1>📚 Automated Teacher Lesson Planner</h1>
+            <div class="teacher-selector">
+                <select id="teacherSelect" onchange="loadTeacherSchedule()">
+                    <option value="">Select Teacher</option>
+                </select>
+            </div>
+            <div class="week-navigator">
+                <button onclick="changeWeek(-1)">← Previous Week</button>
+                <div class="week-display" id="weekDisplay"></div>
+                <button onclick="changeWeek(1)">Next Week →</button>
             </div>
         </div>
 
-        <div class="content">
-            <!-- Daily Responsibilities Section -->
-            <div class="section">
-                <div class="section-header">📋 Daily Responsibilities</div>
-                <div class="section-body">
-                    <div class="checklist-item">
-                        <input type="checkbox" id="attendance">
-                        <label for="attendance">Attendance & Punctuality Records Maintained</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="checklist-item">
-                        <input type="checkbox" id="discipline">
-                        <label for="discipline">Discipline Maintenance (breaks, lunch, class)</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="checklist-item">
-                        <input type="checkbox" id="timekeeping">
-                        <label for="timekeeping">Timekeeping for Breaks & Lunch</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="checklist-item">
-                        <input type="checkbox" id="pe-support">
-                        <label for="pe-support">PE Time Support & Student Discipline</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="checklist-item">
-                        <input type="checkbox" id="environment">
-                        <label for="environment">Environment Care (classroom tidiness, lobby safety, clean-up duties)</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="checklist-item">
-                        <input type="checkbox" id="language">
-                        <label for="language">Language Monitoring (gentle reminders given)</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-                </div>
+        <div class="teacher-info" id="teacherInfo" style="display: none;">
+            <div class="info-card">
+                <div class="info-label">Teacher Name</div>
+                <div class="info-value" id="displayTeacherName"></div>
             </div>
-
-            <!-- Weekly Responsibilities Section -->
-            <div class="section">
-                <div class="section-header">📅 Weekly Responsibilities</div>
-                <div class="section-body">
-                    <div class="checklist-item">
-                        <input type="checkbox" id="assembly">
-                        <label for="assembly">Weekly Assembly Coordination & MC Duties</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="checklist-item">
-                        <input type="checkbox" id="activities">
-                        <label for="activities">Activity Coordination (Fun Friday, monthly activities)</label>
-                        <select class="status-select">
-                            <option value="">Status</option>
-                            <option value="excellent">Excellent</option>
-                            <option value="good">Good</option>
-                            <option value="needs-improvement">Needs Work</option>
-                        </select>
-                        <div class="comment-box">
-                            <span class="comment-label">Prefect's Comments:</span>
-                            <textarea placeholder="Add your comments here..."></textarea>
-                        </div>
-                    </div>
-                </div>
+            <div class="info-card">
+                <div class="info-label">Department</div>
+                <div class="info-value" id="displayDepartment"></div>
             </div>
-
-            <!-- Teacher's Evaluation Section -->
-            <div class="section">
-                <div class="section-header">👨‍🏫 Teacher's Evaluation</div>
-                <div class="section-body">
-                    <div class="comment-box" style="grid-column: 1;">
-                        <span class="comment-label"><strong>Academic Performance Feedback:</strong></span>
-                        <textarea placeholder="Teacher's feedback on attendance records, progress, and areas of improvement..."></textarea>
-                    </div>
-
-                    <div class="comment-box" style="grid-column: 1; margin-top: 20px;">
-                        <span class="comment-label"><strong>Behavioural Evaluation:</strong></span>
-                        <textarea placeholder="Evaluate discipline, cooperation, recurring issues, and positive contributions (teamwork, leadership)..."></textarea>
-                    </div>
-
-                    <div class="comment-box" style="grid-column: 1; margin-top: 20px;">
-                        <span class="comment-label"><strong>Areas for Improvement:</strong></span>
-                        <textarea placeholder="Specific areas where the prefect can improve..."></textarea>
-                    </div>
-
-                    <div class="comment-box" style="grid-column: 1; margin-top: 20px;">
-                        <span class="comment-label"><strong>Positive Recognition:</strong></span>
-                        <textarea placeholder="Acknowledge positive contributions, leadership qualities, and teamwork..."></textarea>
-                    </div>
-                </div>
+            <div class="info-card">
+                <div class="info-label">Total Classes</div>
+                <div class="info-value" id="displayTotalClasses"></div>
             </div>
+        </div>
 
-            <!-- Signature Section -->
-            <div class="signature-section">
-                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">✍️ Signatures</h2>
-                <div class="signature-grid">
-                    <div class="signature-box">
-                        <h3>Prefect</h3>
-                        <input type="text" placeholder="Prefect's Full Name" id="prefectSigName">
-                        <input type="date" id="prefectDate">
-                        <div class="signature-line">Prefect's Signature</div>
-                    </div>
-
-                    <div class="signature-box">
-                        <h3>Teacher</h3>
-                        <input type="text" placeholder="Teacher's Full Name" id="teacherSigName">
-                        <input type="date" id="teacherDate">
-                        <div class="signature-line">Teacher's Signature</div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="print-btn" onclick="window.print()">🖨️ Print Checklist</button>
+        <div class="planner-body">
+            <div id="plannerDays"></div>
+            <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
         </div>
     </div>
 
     <script>
-        // Auto-fill today's date for signature fields
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('prefectDate').value = today;
-        document.getElementById('teacherDate').value = today;
+        // Teacher database with their subjects and classes
+        const teachersData = {
+            "Ms. Sham": {
+                department: "Mathematics",
+                classes: [
+                    { class: "Avon", subject: "Mathematics", day: "Monday" },
+                    { class: "Danube", subject: "Mathematics", day: "Wednesday" },
+                    { class: "Grade 5B", subject: "Mathematics", day: "Monday" },
+                    { class: "Grade 5B", subject: "Mathematics", day: "Thursday" },
+                    { class: "Grade 6A", subject: "Mathematics", day: "Tuesday" },
+                    { class: "Grade 6A", subject: "Mathematics", day: "Friday" }
+                ]
+            },
+            "Mr. Mohan": {
+                department: "Science",
+                classes: [
+                    { class: "Grade 7A", subject: "Physics", day: "Monday" },
+                    { class: "Grade 7A", subject: "Physics", day: "Wednesday" },
+                    { class: "Grade 7B", subject: "Physics", day: "Tuesday" },
+                    { class: "Grade 8A", subject: "Chemistry", day: "Thursday" },
+                    { class: "Grade 8A", subject: "Chemistry", day: "Friday" }
+                ]
+            },
+            "Ms. Husna": {
+                department: "English Language",
+                classes: [
+                    { class: "Grade 4A", subject: "English", day: "Monday" },
+                    { class: "Grade 4A", subject: "English", day: "Wednesday" },
+                    { class: "Grade 4A", subject: "English", day: "Friday" },
+                    { class: "Grade 4B", subject: "English", day: "Tuesday" },
+                    { class: "Grade 4B", subject: "English", day: "Thursday" }
+                ]
+            },
+            "Ms. Vithiyaa": {
+                department: "History & Social Studies",
+                classes: [
+                    { class: "Grade 9A", subject: "World History", day: "Monday" },
+                    { class: "Grade 9A", subject: "World History", day: "Thursday" },
+                    { class: "Grade 10A", subject: "Geography", day: "Tuesday" },
+                    { class: "Grade 10B", subject: "Geography", day: "Wednesday" },
+                    { class: "Grade 10B", subject: "Geography", day: "Friday" }
+                ]
+            },
+            "Ms. Lisa Anderson": {
+                department: "Computer Science",
+                classes: [
+                    { class: "Grade 8A", subject: "Programming", day: "Monday" },
+                    { class: "Grade 8B", subject: "Programming", day: "Tuesday" },
+                    { class: "Grade 9A", subject: "Web Development", day: "Wednesday" },
+                    { class: "Grade 9B", subject: "Web Development", day: "Thursday" }
+                ]
+            }
+        };
 
-        // Auto-populate prefect name in signature if filled in header
-        document.getElementById('prefectName').addEventListener('input', function() {
-            document.getElementById('prefectSigName').value = this.value;
-        });
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        let currentWeekOffset = 0;
+
+        // Initialize
+        function init() {
+            populateTeacherDropdown();
+            updateWeekDisplay();
+        }
+
+        function populateTeacherDropdown() {
+            const select = document.getElementById('teacherSelect');
+            Object.keys(teachersData).forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher;
+                option.textContent = teacher;
+                select.appendChild(option);
+            });
+        }
+
+        function getWeekDates(offset = 0) {
+            const today = new Date();
+            const currentDay = today.getDay();
+            const diff = currentDay === 0 ? -6 : 1 - currentDay; // Adjust to Monday
+            
+            const monday = new Date(today);
+            monday.setDate(today.getDate() + diff + (offset * 7));
+            
+            const friday = new Date(monday);
+            friday.setDate(monday.getDate() + 4);
+            
+            return { monday, friday };
+        }
+
+        function formatDate(date) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
+
+        function updateWeekDisplay() {
+            const { monday, friday } = getWeekDates(currentWeekOffset);
+            document.getElementById('weekDisplay').textContent = 
+                `${formatDate(monday)} - ${formatDate(friday)}`;
+        }
+
+        function changeWeek(direction) {
+            currentWeekOffset += direction;
+            updateWeekDisplay();
+            const teacher = document.getElementById('teacherSelect').value;
+            if (teacher) {
+                loadTeacherSchedule();
+            }
+        }
+
+        function getDayDate(dayName, weekOffset = 0) {
+            const dayIndex = days.indexOf(dayName);
+            const { monday } = getWeekDates(weekOffset);
+            const date = new Date(monday);
+            date.setDate(monday.getDate() + dayIndex);
+            return date;
+        }
+
+        function loadTeacherSchedule() {
+            const teacherName = document.getElementById('teacherSelect').value;
+            if (!teacherName) {
+                document.getElementById('teacherInfo').style.display = 'none';
+                document.getElementById('plannerDays').innerHTML = '';
+                return;
+            }
+
+            const teacher = teachersData[teacherName];
+            
+            // Update teacher info
+            document.getElementById('teacherInfo').style.display = 'grid';
+            document.getElementById('displayTeacherName').textContent = teacherName;
+            document.getElementById('displayDepartment').textContent = teacher.department;
+            document.getElementById('displayTotalClasses').textContent = teacher.classes.length;
+
+            // Generate schedule
+            const plannerDays = document.getElementById('plannerDays');
+            plannerDays.innerHTML = '';
+
+            days.forEach(day => {
+                const dayClasses = teacher.classes.filter(c => c.day === day);
+                const dayDate = getDayDate(day, currentWeekOffset);
+                const dateStr = formatDate(dayDate);
+                const dateInput = dayDate.toISOString().split('T')[0];
+
+                const daySection = document.createElement('div');
+                daySection.className = 'day-section';
+
+                let lessonsHTML = '';
+                if (dayClasses.length === 0) {
+                    lessonsHTML = '<div class="no-lessons">No classes scheduled for this day</div>';
+                } else {
+                    dayClasses.forEach((classInfo, index) => {
+                        lessonsHTML += `
+                            <div class="lesson-entry">
+                                <div class="lesson-header-row">
+                                    <div class="class-subject">
+                                        ${classInfo.class} - ${classInfo.subject}
+                                    </div>
+                                    <div class="date-display">${dateStr}</div>
+                                </div>
+                                <div class="lesson-content">
+                                    <div class="input-group">
+                                        <label>Topic:</label>
+                                        <input type="text" placeholder="Enter main topic for this lesson">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Sub-topics:</label>
+                                        <textarea placeholder="Enter sub-topics, learning objectives, or key points to cover"></textarea>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Notes:</label>
+                                        <textarea placeholder="Additional notes, homework assignments, or reminders"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                daySection.innerHTML = `
+                    <div class="day-header">
+                        <span>${day}</span>
+                        <span>${dateStr}</span>
+                    </div>
+                    ${lessonsHTML}
+                `;
+
+                plannerDays.appendChild(daySection);
+            });
+        }
+
+        // Initialize on page load
+        init();
     </script>
 </body>
 </html>
